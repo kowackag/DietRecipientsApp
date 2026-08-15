@@ -73,6 +73,10 @@ namespace DietApp
                             }
                         }
                         break;
+                    case '3':
+                        Console.WriteLine("Exit");
+                        isRunning = false;
+                        break;
                     default:
                         Console.WriteLine("Incorect chosen actions");
                         isRunning = false;
@@ -86,6 +90,7 @@ namespace DietApp
         {
             actionService.AddNewAction(1, "Go to recipes", "Main");
             actionService.AddNewAction(2, "Go to products", "Main");
+            actionService.AddNewAction(3, "Exit", "Main");
 
             actionService.AddNewAction(1, "Add item", "SubMenu");
             actionService.AddNewAction(2, "Remove item", "SubMenu");

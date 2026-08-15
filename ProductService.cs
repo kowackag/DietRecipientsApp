@@ -2,7 +2,7 @@
 {
     internal class ProductService
     {
-        public List<Product> Products { get; set; }
+        private List<Product> Products { get; set; }
 
         public ProductService()
         {
