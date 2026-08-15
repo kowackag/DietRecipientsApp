@@ -120,16 +120,10 @@ namespace DietApp
         {
             string? userInput = Console.ReadLine();
             bool isCorrectInput = T.TryParse(userInput, null, out T number);
-
-            int[] numbers = new int[5] { 1, 2, 3, 4, 5 };
-            Array.ConvertAll(numbers, number => number*3);
-
-            Console.WriteLine(numbers[0]);
-
-     
+                 
             while (!isCorrectInput)
             {
-                Console.WriteLine($"Incorect {name}, try again");
+                Console.WriteLine($"Incorrect {name}, try again");
                 userInput = Console.ReadLine();
                 isCorrectInput = T.TryParse(userInput, null, out number);
             }
