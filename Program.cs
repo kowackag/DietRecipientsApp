@@ -40,7 +40,7 @@ namespace DietApp
                             switch (chosenAction.KeyChar)
                             {
                                 case '1':
-                                    Console.WriteLine($"Write product name");
+                                    Console.WriteLine("Write product name");
                                     string name = GetUserInputString("name");
                                     Console.WriteLine("Write calories per 100 gram");
                                     decimal calories = GetUserInputNumber<decimal>("calories");
@@ -58,10 +58,21 @@ namespace DietApp
                                 case '2':
                                     Console.WriteLine("Write id to remove");
                                     long idToRemove = GetUserInputNumber<long>("id");
-                                    productService.RemoveProduct(idToRemove);
+                                    bool isToRemove = productService.RemoveProduct(idToRemove);
+
+                                    if (!isToRemove)
+                                    {
+                                        Console.WriteLine("Incorect id. Choose one from below: ");
+                                        ShowProducts(productService.GetAllProducts());
+                                    }
+                                    else
+                                    {
+                                            
+                                        Console.WriteLine("Product was succesfully removed ");
+                                    }
                                     break;
                                 case '3':
-                                    productService.ShowAllProducts();
+                                    ShowProducts(productService.GetAllProducts());
                                     break;
                                 case '4':
                                     Console.WriteLine("Go back");
@@ -79,7 +90,6 @@ namespace DietApp
                         break;
                     default:
                         Console.WriteLine("Incorect chosen actions");
-                        isRunning = false;
                         break;
                 }
             }
@@ -133,6 +143,34 @@ namespace DietApp
                 isCorrectInput = T.TryParse(userInput, null, out number);
             }
             return number;
+        }
+
+        internal static void ShowProducts(IReadOnlyList<Product> products)
+        {
+            if (products.Count == 0)
+            {
+                Console.WriteLine("The list is empty");
+                return;
+            }
+            Console.WriteLine(
+                $"{"id",-20}" +
+                $"{"Name",24}" +
+                $"{"Calories",10}" +
+                $"{"Proteins",10}" +
+                $"{"Fats",10}" +
+                $"{"Carbohydrates",18}"
+            );
+            foreach (var product in products)
+            {
+
+                Console.WriteLine(
+                    $"{product.Id,-20}" +
+                    $"{product.Name,24}" +
+                    $"{product.Calories,10}" +
+                    $"{product.Proteins,10}" +
+                    $"{product.Fats,10}" +
+                    $"{product.Carbohydrates,18}");
+            }
         }
     }
 }
