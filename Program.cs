@@ -1,5 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using System.Numerics;
+using DietApp.NewFolder;
+using DietApp.ProductServiceModel;
 
 namespace DietApp
 {
@@ -50,9 +52,9 @@ namespace DietApp
                                     decimal fats = GetUserInputNumber<decimal>("fats");
                                     Console.WriteLine("Write carbohydrates per 100 gram");
                                     decimal carbohydrates = GetUserInputNumber<decimal>("carbohydrates");
-                                    long id = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                                    
 
-                                    productService.AddNewProduct(id, name, calories, proteins, fats, carbohydrates);
+                                    productService.AddNewProduct(name, calories, proteins, fats, carbohydrates);
 
                                     break;
                                 case '2':
@@ -67,7 +69,6 @@ namespace DietApp
                                     }
                                     else
                                     {
-                                            
                                         Console.WriteLine("Product was succesfully removed ");
                                     }
                                     break;
@@ -145,7 +146,7 @@ namespace DietApp
             return number;
         }
 
-        internal static void ShowProducts(IReadOnlyList<Product> products)
+        internal static void ShowProducts(IReadOnlyList<IProduct> products)
         {
             if (products.Count == 0)
             {
