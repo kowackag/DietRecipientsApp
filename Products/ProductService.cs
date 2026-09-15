@@ -1,7 +1,7 @@
 ﻿using DietApp.ProductModels;
 using DietApp.ProductsModel;
 
-namespace DietApp.ProductModel
+namespace DietApp.ProductModels
 {
     internal class ProductService
     {

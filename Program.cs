@@ -1,7 +1,11 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using System.Numerics;
-using DietApp.NewFolder;
-using DietApp.ProductServiceModel;
+using DietApp.ProductModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace DietApp
 {
@@ -52,9 +56,23 @@ namespace DietApp
                                     decimal fats = GetUserInputNumber<decimal>("fats");
                                     Console.WriteLine("Write carbohydrates per 100 gram");
                                     decimal carbohydrates = GetUserInputNumber<decimal>("carbohydrates");
-                                    
 
-                                    productService.AddNewProduct(name, calories, proteins, fats, carbohydrates);
+                                    Console.WriteLine("Is it a branded product? (if branded type 'yes')");
+                                    string isBranded = GetUserInputString("yes or no");
+                                    if (isBranded.ToLower() == "yes")
+                                    {
+                                        Console.WriteLine("Write brand name");
+                                        string brand = GetUserInputString("brand");
+                                        Console.WriteLine("Write barcode (optional)");
+                                        string? barcode = GetUserInputString("barcode", true);
+                                        Console.WriteLine("Write description (optional)");
+                                        string? description = GetUserInputString("description", true);
+                                        productService.AddBrandedProduct(name, calories, proteins, fats, carbohydrates, brand, barcode, description);
+                                    }
+                                    else
+                                    {
+                                        productService.AddGenericProduct(name, calories, proteins, fats, carbohydrates);
+                                    }
 
                                     break;
                                 case '2':
@@ -119,11 +137,11 @@ namespace DietApp
             }
         }
 
-        internal static string GetUserInputString(string name)
+        internal static string GetUserInputString(string name, bool isOptional = false)
         {
             string? userInput = Console.ReadLine();
             bool isCorrectInput = userInput != null && userInput.Length > 0;
-            while (!isCorrectInput)
+            while (!isCorrectInput && !isOptional)
             {
                 Console.WriteLine($"Incorect {name}, try again");
                 userInput = Console.ReadLine();
@@ -146,7 +164,7 @@ namespace DietApp
             return number;
         }
 
-        internal static void ShowProducts(IReadOnlyList<IProduct> products)
+        internal static void ShowProducts(IReadOnlyList<Product> products)
         {
             if (products.Count == 0)
             {
@@ -154,23 +172,28 @@ namespace DietApp
                 return;
             }
             Console.WriteLine(
-                $"{"id",-20}" +
-                $"{"Name",24}" +
-                $"{"Calories",10}" +
-                $"{"Proteins",10}" +
-                $"{"Fats",10}" +
-                $"{"Carbohydrates",18}"
+                $"{"id",-12}" +
+                $"{"Name",18}" +
+                $"{"Calories 100g",18}" +
+                $"{"Proteins 100g",18}" +
+                $"{"Fats 100g",18}" +
+                $"{"Carbohydrates 100g",22}" +
+                $"{"Brand",16}" +
+                $"{"Barcode",16}"
             );
             foreach (var product in products)
             {
-
+                var branded = product as BrandedProduct;
                 Console.WriteLine(
-                    $"{product.Id,-20}" +
-                    $"{product.Name,24}" +
-                    $"{product.Calories,10}" +
-                    $"{product.Proteins,10}" +
-                    $"{product.Fats,10}" +
-                    $"{product.Carbohydrates,18}");
+                    $"{product.Id,-12}" +
+                    $"{product.Name,18}" +
+                    $"{product.NutritionPer100g.Calories,18}" +
+                    $"{product.NutritionPer100g.Proteins,18}" +
+                    $"{product.NutritionPer100g.Fats,18}" +
+                    $"{product.NutritionPer100g.Carbohydrates,22}" +
+                    $"{branded?.Brand ?? "---",16}" +
+                    $"{branded?.Barcode ?? "---",16}"
+                    );
             }
         }
     }
