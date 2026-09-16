@@ -9,18 +9,18 @@ namespace DietApp.ConsoleUI
 {
     internal class ProductMenuController
     {
-        private readonly MenuActionService actionService;
-        private readonly ProductService productService;
+        private readonly MenuActionService _actionService;
+        private readonly ProductService _productService;
 
         public ProductMenuController(MenuActionService actionService, ProductService productService)
         {
-            this.actionService = actionService;
-            this.productService = productService;
+            _actionService = actionService;
+            _productService = productService;
         }
 
         public void Run()
         {
-            var subMenu = actionService.GetMenuActionsByMenuName("SubMenu");
+            var subMenu = _actionService.GetMenuActionsByMenuName("SubMenu");
             bool isSubMenuRunning = true;
             while (isSubMenuRunning)
             {
@@ -51,23 +51,23 @@ namespace DietApp.ConsoleUI
                             string? barcode = ConsoleInputService.GetUserInputString("barcode", true);
                             Console.WriteLine("Write description (optional)");
                             string? description = ConsoleInputService.GetUserInputString("description", true);
-                            productService.AddBrandedProduct(name, calories, proteins, fats, carbohydrates, brand, barcode, description);
+                            _productService.AddBrandedProduct(name, calories, proteins, fats, carbohydrates, brand, barcode, description);
                         }
                         else
                         {
-                            productService.AddGenericProduct(name, calories, proteins, fats, carbohydrates);
+                            _productService.AddGenericProduct(name, calories, proteins, fats, carbohydrates);
                         }
 
                         break;
                     case '2':
                         Console.WriteLine("Write id to remove");
                         long idToRemove = ConsoleInputService.GetUserInputNumber<long>("id");
-                        bool isToRemove = productService.RemoveProduct(idToRemove);
-
+                        bool isToRemove = _productService.RemoveProduct(idToRemove);
+                            
                         if (!isToRemove)
                         {
                             Console.WriteLine("Incorrect id. Choose one from below: ");
-                            ConsoleView.ShowProducts(productService.GetAllProducts());
+                            ConsoleView.ShowProducts(_productService.GetAllProducts());
                         }
                         else
                         {
@@ -75,7 +75,7 @@ namespace DietApp.ConsoleUI
                         }
                         break;
                     case '3':
-                        ConsoleView.ShowProducts(productService.GetAllProducts());
+                        ConsoleView.ShowProducts(_productService.GetAllProducts());
                         break;
                     case '4':
                         Console.WriteLine("Go back");
